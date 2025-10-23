@@ -1,0 +1,26 @@
+<fieldset class="box settings">
+  <p>
+    <label for="settings_jira_url">URL Jira</label><br/>
+    <%= text_field_tag 'settings[jira_url]', @settings['jira_url'], size: 60 %>
+  </p>
+
+  <p>
+    <label for="settings_jira_username">Nom d'utilisateur Jira</label><br/>
+    <%= text_field_tag 'settings[jira_username]', @settings['jira_username'] %>
+  </p>
+
+  <p>
+    <label for="settings_jira_api_token">Jeton API Jira</label><br/>
+    <%= password_field_tag 'settings[jira_api_token]', @settings['jira_api_token'] %>
+  </p>
+
+  <p>
+    <label for="settings_jira_api_token">Custom Field : Key</label><br/>
+    <%= text_field_tag 'settings[custom_field_key]', @settings['custom_field_key'] %>
+  </p>
+
+  <p>
+    <label for="settings_jira_api_token">Custom Field : Url Jira </label><br/>
+    <%= text_field_tag 'settings[custom_field_url]', @settings['custom_field_url'] %>
+  </p>
+</fieldset>

@@ -1,0 +1,30 @@
+<h3 class="title">Import tickets from Jira</h3>
+
+<div class="box">
+  <%= form_tag({ controller: 'jira_imports', action: 'create', project_id: @project }, method: :post, id: 'jira-import-form', remote: true, data: { no_turbolink: true }) do %>
+    <p>
+      <label for="jira_urls"><strong>Jira ticket URLs (one per line):</strong></label><br/>
+      <%= text_area_tag :jira_urls, '', rows: 15, class: 'wiki-edit',
+          placeholder: "https://jira.example.com/browse/PROJ-123\nhttps://jira.example.com/browse/PROJ-124" %>
+    </p>
+
+    <div id="import-progress" style="display:none; margin-top: 10px;">
+      <div style="background: #e3f2fd; padding: 15px; border-radius: 3px; border-left: 4px solid #2196f3;">
+        <strong>⏳ Import in progress...</strong>
+        <p style="margin: 5px 0 0 0; font-size: 0.9em;">Please wait while fetching and creating tickets.</p>
+      </div>
+    </div>
+    
+    <div id="import-results" style="display:none; margin-top: 10px;">
+      <div id="success-results"></div>
+      <div id="error-results"></div>
+    </div>
+    
+    <div style="margin-top: 20px; text-align: right; padding-top: 10px; border-top: 1px solid #ddd;">
+      <%= submit_tag 'Import', class: 'button', id: 'import-submit', style: 'background: #169bd5; color: white; padding: 8px 16px; border: none; border-radius: 3px; cursor: pointer;' %>
+      <button type="button" class="button" id="cancel-import" style="padding: 8px 16px; margin-left: 5px;">Cancel</button>
+    </div>
+  <% end %>
+</div>
+
+<%= javascript_include_tag 'redmine_jira_importer.js', plugin: 'redmine_jira_importer' %>
