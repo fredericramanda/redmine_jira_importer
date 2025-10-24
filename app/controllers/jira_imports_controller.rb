@@ -104,6 +104,18 @@ class JiraImportsController < ApplicationController
     issue.save!
     issue.reload
 
+    # Import comments as journal notes
+    if jira_data['fields']['comment'] && jira_data['fields']['comment']['comments']
+      jira_data['fields']['comment']['comments'].each do |comment_data|
+        journal = issue.journals.new(
+          user: map_user(comment_data['author']),
+          notes: comment_data['body'] + ' original author:' + comment_data['author']['displayName'],
+          created_on: Time.parse(comment_data['created'])
+        )
+        journal.save!
+      end
+    end
+
     if customFieldKey
       # Save jira_key and url to custom fields
       if numero_field = CustomField.find_by_name('ExtNumero')
@@ -153,7 +165,7 @@ class JiraImportsController < ApplicationController
     require 'uri'
 
     # Request only the needed fields to reduce payload
-    fields = '-comments'
+    fields = '-attachment'
     uri = URI("#{jira_url}/rest/api/2/issue/#{jira_key}")
     uri.query = URI.encode_www_form(fields: fields)
 
