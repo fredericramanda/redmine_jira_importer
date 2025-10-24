@@ -89,7 +89,7 @@ class JiraImportsController < ApplicationController
     issue = Issue.new(
       project: @project,
       tracker_id: @project.trackers.first.id,
-      subject: jira_data['fields']['summary'],
+      subject: jira_key + ":" + jira_data['fields']['summary'],
       description: convert_description(jira_data),
       author: User.current,
       assigned_to: map_user(jira_data['fields']['assignee']),
