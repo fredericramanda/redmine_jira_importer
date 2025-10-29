@@ -101,8 +101,25 @@ class JiraImportsController < ApplicationController
     if jira_data['fields']['duedate']
       issue.due_date = Date.parse(jira_data['fields']['duedate'])
     end
+
+      # SET CUSTOM FIELDS BEFORE SAVING
+    if customFieldKey
+      if numero_field = CustomField.find_by_name('ExtNumero')
+        issue.custom_field_values = { numero_field.id => jira_key }
+      end
+    end
+  
+    customFieldUrl = settings['custom_field_url']
+    if customFieldUrl
+      jira_url = settings['jira_url']
+      my_url = url == jira_key ? jira_url + '/browse/' + jira_key : url
+      
+      if url_field = CustomField.find_by_name('ExtURL')
+        issue.custom_field_values = { url_field.id => my_url }
+      end
+    end
+    
     issue.save!
-    issue.reload
 
     # Import comments as journal notes
     if jira_data['fields']['comment'] && jira_data['fields']['comment']['comments']
@@ -115,31 +132,6 @@ class JiraImportsController < ApplicationController
         journal.save!
       end
     end
-
-    if customFieldKey
-      # Save jira_key and url to custom fields
-      if numero_field = CustomField.find_by_name('ExtNumero')
-        numero_cv = issue.custom_values.find_or_initialize_by(:custom_field => numero_field)
-        numero_cv.value = jira_key
-        numero_cv.save
-      end
-    end
-
-    customFieldUrl = settings['custom_field_url']
-    if customFieldUrl
-      jira_url = settings['jira_url']
-      my_url = url
-      if my_url == jira_key
-        my_url = jira_url + '/browse/' + jira_key
-      end
-
-      if url_field = CustomField.find_by_name('ExtURL')
-        url_cv = issue.custom_values.find_or_initialize_by(:custom_field => url_field)
-        url_cv.value = my_url
-        url_cv.save
-      end
-    end
-    issue.save!
 
     Rails.logger.info "Successfully saved Redmine issue ##{issue.id} for Jira key: #{jira_key}"
     issue

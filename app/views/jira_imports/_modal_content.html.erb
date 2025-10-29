@@ -1,7 +1,7 @@
 <h3 class="title">Import tickets from Jira</h3>
 
 <div class="box">
-  <%= form_tag({ controller: 'jira_imports', action: 'create', project_id: @project }, method: :post, id: 'jira-import-form', remote: true, data: { no_turbolink: true }) do %>
+  <%= form_tag({ controller: 'jira_imports', action: 'create', project_id: @project }, method: :post, id: 'jira-import-form', data: { no_turbolink: true }) do %>
     <p>
       <label for="jira_urls"><strong>Jira ticket URLs or Key (one per line):</strong></label><br/>
       <%= text_area_tag :jira_urls, '', rows: 15, class: 'wiki-edit',

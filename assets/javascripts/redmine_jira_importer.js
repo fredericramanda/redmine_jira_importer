@@ -65,8 +65,9 @@ function setupFormHandlers($modal) {
   var $cancelBtn = $modal.find('#cancel-import');
   var $textArea = $form.find('textarea[name="jira_urls"]');
 
-  $form.on('submit', function(e) {
+  $form.off('submit').on('submit', function(e) {
     e.preventDefault();
+    e.stopImmediatePropagation();
 
     // Show progress and disable submit button
     $progress.show();
@@ -119,14 +120,14 @@ function setupFormHandlers($modal) {
     });
   });
 
-  $cancelBtn.on('click', function() {
+  $cancelBtn.off('click').on('click', function() {
     const form = $('#jira-import-form');
     form[0].reset(); // Reset form fields to their default values
     $(this).closest('.modal').dialog('close');
   });
 
   // Optional: Reset form when closing the modal to prevent lingering unsaved changes
-  $('.ui-dialog-titlebar-close').on('click', function () {
+  $('.ui-dialog-titlebar-close').off('click').on('click', function () {
     const form = $('#jira-import-form');
     form[0].reset(); // Reset form fields to their default values
     $(this).closest('.modal').dialog('close');
