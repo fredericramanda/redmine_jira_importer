@@ -84,7 +84,9 @@ function setupFormHandlers($modal) {
         if (data.success && data.success.length > 0) {
           successHtml += '<h4>✅ Successfully Imported</h4><ul>';
           data.success.forEach(function(item) {
-            successHtml += '<li><a href="/issues/' + item.issue_id + '">' + item.issue_subject + '</a> (from ' + item.url + ')</li>';
+            const currentPath = window.location.pathname;
+            const url = currentPath.replace(/\/projects\/[^/]+\/issues.*$/, '/issues/');
+            successHtml += '<li><a href="' + url + item.issue_id + '">' + item.issue_subject + '</a> (from ' + item.url + ')</li>';
           });
           successHtml += '</ul>';
         }
